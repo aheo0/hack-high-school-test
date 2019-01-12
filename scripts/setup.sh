@@ -1,10 +1,10 @@
-pathadd() {
+function pathadd()
+{
     if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
         echo 'yas'
         PATH="${PATH:+"$PATH:"}$1"
     fi
 }
-
 
 pathadd ~/Library/Python/3.7/bin/
 export PATH
