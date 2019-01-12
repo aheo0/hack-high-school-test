@@ -4,4 +4,3 @@ gunicorn==19.9.0
 jsonschema==2.6.0
 requests==2.21.0
 flask-cors==3.0.6
-
