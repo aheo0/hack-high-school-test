@@ -1,9 +1,18 @@
 from flask import Flask, request, jsonify, render_template
 import json
 
-
-
 app = Flask(__name__)
+
+def dump_json(file, data, json_format=True, json_type=True):
+	'''file, data, json=True -> dumps data into a file'''
+	filename = file
+	if json_format:
+		filename = 'json/' + file
+	if json_type:
+		filename += '.json'
+
+	with open(filename, 'w') as f:
+		json.dump(data, f)
 
 with open('json/user_content.json', 'r') as f:
 	person = json.load(f)
@@ -24,7 +33,7 @@ def username_post_put_delete():
 		person = json.load(f)
 
 	person_request = request.json
-	with open('random.txt', 'r+') as f:
+	with open('json/random.txt', 'r+') as f:
 		json.dump(person_request, f)
 	if True:
 	#try:
@@ -68,8 +77,7 @@ def username_post_put_delete():
 				return jsonify('Data for this user already exists.', username + ': ' + person[username], 'Please use the PUT method to make changes.', 400)
 			else:
 				person[username] = comment
-				with open('json/user_content.json', 'w') as f:
-					json.dump(person, f)
+				dump_json('user_content', person)
 				
 				return jsonify({"user-data":person, "HTTP-error":200})
 
@@ -87,8 +95,7 @@ def username_post_put_delete():
 
 			if username in person:
 				person[username] = comment
-				with open('json/user_content.json', 'w') as f:
-					json.dump(person, f)
+				dump_json('user_content', person)
 				
 				return jsonify({"user-data":person, "HTTP-error":200})
 			else:
@@ -100,8 +107,7 @@ def username_post_put_delete():
 
 			if delete_user in person:
 				del person[delete_user]
-				with open('json/user_content.json', 'w') as f:
-					json.dump(person, f)
+				dump_json('user_content', person)
 				return jsonify({"message":"User has successfully been deleted from the database.", "HTTP-error": 200})
 			else:
 				return jsonify(username + ' does not exist in the database.', 400)
