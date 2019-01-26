@@ -144,6 +144,85 @@ def username_get(user):
 	else:
 		return jsonify({"error-message": "Please use the GET method to see this user's data.", "HTTP-error":500})
 
+# If you wanna get a payload, look into that flask.request method above
+@app.route('/api/v1/user', methods=['GET', 'POST'])
+def api_username_post_put_delete():
+	with open('json/user_content.json', 'r') as f:
+		person = json.load(f)
+
+	person_request = request.json
+	with open('json/random.txt', 'r+') as f:
+		json.dump(person_request, f)
+
+	if request.method == 'GET':
+		return jsonify({"user-data":person, "HTTP-error":200})
+
+	elif request.method == 'POST':
+		person_request = request.json
+		with open('json/random.txt', 'r+') as f:
+			f.write(str(person_request))
+		user_in_person = None
+
+		if 'username' in person_request and 'comment' in person_request:
+			username = person_request['username']
+			comment = person_request['comment']
+		else:
+			return 'You\'re annoying.'
+
+		if username in person:
+			return jsonify('Data for this user already exists.', username + ': ' + person[username], 'Please use the PUT method to make changes.', 400)
+		else:
+			person[username] = comment
+			dump_json('user_content', person)
+			
+			return jsonify({"user-data":person, "HTTP-error":200})
+
+	else:
+		return jsonify({"error-message":"Wrong method has been used.", "HTTP-error": 400})
+
+@app.route('/api/v1/user/<user>', methods=['GET', 'PUT', 'DELETE'])
+def api_specific_user(user):
+	with open('json/user_content.json', 'r') as f:
+		person = json.load(f)
+	person_request = request.json
+
+	if user not in person:
+		return jsonify({"error-message":"User does not exist in the database. Please use the POST method to create new ones.", "HTTP-error": 400})
+
+	if request.method == 'GET':
+		return jsonify({"user-comment":person[user], "HTTP-error":200})
+
+	elif request.method == 'PUT':
+		person_request = request.json
+		with open('json/random.txt', 'r+') as f:
+			f.write(str(person_request))
+		user_in_person = None
+
+		if 'comment' in person_request:
+			comment = person_request['comment']
+		else:
+			return 'You\'re annoying.'
+
+		if user in person:
+			person[user] = comment
+			dump_json('user_content', person)
+			
+			return jsonify({"user-data":"New comment: %s" % comment, "HTTP-error":200})
+		else:
+			return jsonify({"user-data": "Data for this user does not exists. Please use the POST method to add new users.", "HTTP-error": 400})
+
+	elif request.method == 'DELETE':
+		if user in person:
+			del person[user]
+			dump_json('user_content', person)
+			return jsonify({"message":"User has successfully been deleted from the database.", "HTTP-error": 200})
+		else:
+			return jsonify(username + ' does not exist in the database.', 400)
+
+	else:
+		return jsonify({"error-message":"Wrong method has been used.", "HTTP-error": 400})
+
+
 @app.route('/goodbye', methods=['GET'])
 def say_goodbye():
     return 'Goodbye!'
