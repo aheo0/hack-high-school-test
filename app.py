@@ -78,7 +78,7 @@ def username_post_put_delete():
 			else:
 				person[username] = comment
 				dump_json('user_content', person)
-				
+
 				return jsonify({"user-data":person, "HTTP-error":200})
 
 		elif request.method == 'PUT':
@@ -96,7 +96,7 @@ def username_post_put_delete():
 			if username in person:
 				person[username] = comment
 				dump_json('user_content', person)
-				
+
 				return jsonify({"user-data":person, "HTTP-error":200})
 			else:
 				return jsonify({"user-data": "Data for this user does not exists. Please use the POST method to add new users.", "HTTP-error": 400})
@@ -121,7 +121,7 @@ def username_post_put_delete():
 			return jsonify(username + ' does not exist in the database.', 400)'''
 
 	#except:
-		
+
 		#return 'hi'
 		#return jsonify('Server has encountered an error.', 500)
 
@@ -138,7 +138,8 @@ def username_get(user):
 
 	if request.method == 'GET':
 		if user in person:
-			return jsonify({"user-data":person[user], "HTTP-error":200})
+			#return jsonify({"user-data":person[user], "HTTP-error":200})
+			return render_template('user.html', user=user, password_text=person[user])
 		else:
 			return jsonify('No user found.', 404)
 	else:
@@ -174,7 +175,7 @@ def api_username_post_put_delete():
 		else:
 			person[username] = comment
 			dump_json('user_content', person)
-			
+
 			return jsonify({"user-data":person, "HTTP-error":200})
 
 	else:
@@ -206,7 +207,7 @@ def api_specific_user(user):
 		if user in person:
 			person[user] = comment
 			dump_json('user_content', person)
-			
+
 			return jsonify({"user-data":"New comment: %s" % comment, "HTTP-error":200})
 		else:
 			return jsonify({"user-data": "Data for this user does not exists. Please use the POST method to add new users.", "HTTP-error": 400})
