@@ -11,11 +11,11 @@
         <form action='' method='post'>
             <input type='text' placeholder='Username' name='username' value='{{request.form.username}}'>
             <input type='password' placeholder='Password' name='password' value='{{request.form.password}}'>
-            <input type='submit' value='Sign Up'>
+            <input type='submit' value='Login'>
         </form>>
 
         {% if error %}
-            <p>An error occured: {{error}}</p>
+            <p>Invalid username and password!</p>
         {% endif %}
         
     </body>
