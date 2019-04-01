@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Welcome to the Handy Dandy Flask Tutorial!</title>
+    </head>
+    <body>
+        {% if code == "1" %}
+            <p>Thank you for signing up! Now please log in.</p>
+        {% endif %}
+
+        <form action='' method='post'>
+            <input type='text' placeholder='Username' name='username' value='{{request.form.username}}'>
+            <input type='password' placeholder='Password' name='password' value='{{request.form.password}}'>
+            <input type='submit' value='Sign Up'>
+        </form>>
+
+        {% if error %}
+            <p>An error occured: {{error}}</p>
+        {% endif %}
+        
+    </body>
+</html>

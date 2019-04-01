@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Welcome to the Handy Dandy Flask Tutorial!</title>
+    </head>
+    <body>
+        <form action='' method='post'>
+            <input type='text' placeholder='Username' name='username' value='{{request.form.username}}'>
+            <input type='password' placeholder='Password' name='password' value='{{request.form.password}}'>
+            <input type='submit' value='Login'>
+        </form>>
+
+        {% if error == "username" %}
+            <p>Useranme has already been taken!</p>
+        {% endif %}
+    </body>
+</html>
